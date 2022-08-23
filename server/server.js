@@ -66,6 +66,7 @@ io.on("connection", (socket) => {
 
   socket.on("chat", (data) => {
     socket.to(data.roomName).emit("chat", data);
+    console.log(data)
   });
 
 });

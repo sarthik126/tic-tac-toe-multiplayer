@@ -4,6 +4,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import './App.css';
 import { solutions } from './Solutions'
 import { io } from 'socket.io-client'
+import Chat from './Chat';
+import Winners from './Winners';
 
 const HOSTNAME = "http://localhost:5500"
 
@@ -28,6 +30,18 @@ function App({ROOM, userName}) {
   const [winners,setWinners] = useState([])
   const [firstReq, setFirstReq] = useState(true)
 
+  const [currentMessage, setCurrentMessage] = useState("")
+  const [messages, setMessages] = useState([])
+
+  const [navToggle, setNavToggle] = useState(true)
+
+  function sendMessage(e) {
+    e.preventDefault()
+    socket.emit("chat",{message: currentMessage, roomName:ROOM, playerName: userName})
+    setMessages(prev => [...prev, {message: currentMessage, roomName:ROOM, playerName: userName}])
+    setCurrentMessage("")
+  }
+
   function setData(index) {
 
     let data = [...board]
@@ -43,7 +57,7 @@ function App({ROOM, userName}) {
       socket.emit("set-role",{playerName:userName,socketId: socket.id,roomName:ROOM,role: current ? 'X' : 'O'})
       setFirstReq(false)
       setMyRole(current ? 'X' : 'O')
-      console.log(current ? 'X' : 'O')
+      // console.log(current ? 'X' : 'O')
     }
   }
 
@@ -105,7 +119,7 @@ function App({ROOM, userName}) {
 
     fetch(`${HOSTNAME}/setPlayerRoles/${ROOM}`)
     .then((res)=> {
-      console.log(res)
+      // console.log(res)
     })
     .catch((err)=>console.log(err))
 
@@ -117,25 +131,21 @@ function App({ROOM, userName}) {
 
   useEffect(() => {
     socket.on("board",(data) => {
-      console.log("BOARD")
+      // console.log("BOARD")
       setBoard(data.board)
       setCurrent(data.current)
       setIsWaiting(false)
       setIsFinished(data.isFinished)
     })
 
-    // socket.on("all-users",(data) => {
-    //   setAllPlayers(data)
-    // })
-
     socket.on("new-user",(data)=>{
       resetBoard()
-      console.log(data)
+      // console.log(data)
       setAllPlayers(data)
     })
 
     socket.on("remove-user",(data)=>{
-      console.log(data)
+      // console.log(data)
       setSecondPlayer("...")
 
       toast(`${data} disconnected from the game !!!`,{
@@ -143,6 +153,12 @@ function App({ROOM, userName}) {
       });
 
       resetBoard()
+    })
+
+    socket.on("chat", (data) => {
+      // let tempMsg = [...messages,data]
+      // console.log(messages)
+      setMessages(prev => [...prev, {message: data.message, roomName:data.roomName, playerName: data.playerName}])
     })
 
   },[socket])
@@ -186,11 +202,17 @@ function App({ROOM, userName}) {
       </div>
 
     <div className='right-pane'>
-      <div className='win-list'>Win List -</div>
-      {winners.map((val,index) => (
-        <button className='win-btn' key={index}>{`Match ${index+1} - ${val}`}</button>
-        ))}
+      <button onClick={()=> setNavToggle(prev=>!prev)}>
+        {navToggle ? "Chats" : "History"}
+      </button>
+
+      {navToggle ? 
+      <Winners winners={winners} />
+      :
+      <Chat sendMessage={sendMessage} messages={messages} currentMessage={currentMessage} setCurrentMessage={setCurrentMessage} />
+      } 
     </div>
+
     </div>
     </>
   );
