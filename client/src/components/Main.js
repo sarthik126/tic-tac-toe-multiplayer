@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import App from './App';
-import './Main.css';
+import '../css/Main.css';
+import GameBoard from './GameBoard'
 
 const HOSTNAME = "http://localhost:5500"
 const ROOM = "happy"
@@ -27,7 +27,8 @@ function Main() {
             <button type='submit'>Submit</button>
             </form>
         </div> :
-        <App ROOM={roomName} userName={userName} />}
+        <GameBoard ROOM={roomName} userName={userName} setRoomValidation={setRoomValidation} />
+        }
     </>
   );
 }
