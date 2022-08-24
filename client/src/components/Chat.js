@@ -6,21 +6,26 @@ export default function Chat({
   messages,
   currentMessage,
   setCurrentMessage,
-  userName
+  userName,
+  messageRef
 }) {
   return (
     <>
       <div className="chat">
-        {messages.map((item, index) =>
-          item.playerName === userName ? (
-            <div key={index} className="chat-me">
+        {messages.map((item, index) => {
+          let lastMessage = index === messages.length - 1
+          if(item.playerName === userName) {
+            return (
+            <div ref={lastMessage ? messageRef : null} key={index} className="chat-me">
               {item.message}
-            </div>
-          ) : (
-            <div key={index} className="chat-other">
+            </div> )
+          } else {
+            return (
+            <div ref={lastMessage ? messageRef : null} key={index} className="chat-other">
               {item.message}
-            </div>
-          )
+            </div>)
+          }
+        }
         )}
       </div>
       <form onSubmit={sendMessage}>

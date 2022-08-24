@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo, useCallback } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import '../css/GameBoard.css';
@@ -34,6 +34,12 @@ function App({ROOM, userName, setRoomValidation}) {
   const [messages, setMessages] = useState([])
 
   const [navToggle, setNavToggle] = useState(true)
+
+  const messageRef = useCallback(node => {
+    if(node) {
+      node.scrollIntoView({ smooth: true })
+    }
+  },[])
 
   function sendMessage(e) {
     e.preventDefault()
@@ -227,7 +233,7 @@ function App({ROOM, userName, setRoomValidation}) {
             </div>
             <hr />
             {navToggle ? 
-                <Chat sendMessage={sendMessage} messages={messages} currentMessage={currentMessage} setCurrentMessage={setCurrentMessage} userName={userName} />
+                <Chat sendMessage={sendMessage} messages={messages} currentMessage={currentMessage} setCurrentMessage={setCurrentMessage} userName={userName} messageRef={messageRef} />
                 :
                 (winners.length !== 0 ? <Winners winners={winners} /> : "...")
             } 

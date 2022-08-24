@@ -195,7 +195,9 @@ hr {
     overflow-y: scroll;
     /* margin-top: 10px; */
     margin-bottom: 5px;
-    justify-content: end;
+    /* justify-content: end; */
+    align-items: flex-start;
+    /* overflow-y: scroll; */
 }
 .chat-me, .chat-other {
     width: 200px;
