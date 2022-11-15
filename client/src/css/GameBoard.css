@@ -54,7 +54,7 @@ body {
   grid-template-columns: 60% 40%;
   background-color: black;
   color: white;
-  user-select: none;
+  /* user-select: none; */
   padding-top: 60px;
 }
 .left-pane {

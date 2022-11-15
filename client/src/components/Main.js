@@ -2,7 +2,7 @@ import { useState } from "react";
 import "../css/Main.css";
 import GameBoard from "./GameBoard";
 
-const HOSTNAME = "http://localhost:5500";
+const HOSTNAME = "https://tic-tac-toe-multiplayer-server.up.railway.app/";
 
 function Main() {
   const [userName, setUserName] = useState("");

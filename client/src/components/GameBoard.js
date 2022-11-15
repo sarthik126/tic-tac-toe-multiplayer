@@ -7,7 +7,7 @@ import { io } from 'socket.io-client'
 import Chat from './Chat';
 import Winners from './Winners';
 
-const HOSTNAME = "http://localhost:5500"
+const HOSTNAME = "https://tic-tac-toe-multiplayer-server.up.railway.app"
 
 function App({ROOM, userName, setRoomValidation}) {
 
